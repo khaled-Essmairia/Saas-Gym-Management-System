@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- The logged-in customer's to-do table (customer dashboard and To-Do page) -->
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table th:fragment="table(list, from)" class="table table-striped table-bordered">
+    <thead><tr><th>Description</th><th>Status</th><th>Opts</th></tr></thead>
+    <tbody>
+    <tr th:each="t : ${list}">
+        <td class="taskDesc" th:text="${t.taskDesc}">Task</td>
+        <td class="taskStatus">
+            <span th:class="${t.taskStatus == 'Pending'} ? 'label label-info' : 'label label-success'" th:text="${t.taskStatus}">Pending</span>
+        </td>
+        <td class="taskOptions">
+            <a th:href="@{/customer/todo/{id}/edit(id=${t.id})}" class="tip-top" title="Update"><i class="fas fa-edit"></i></a>
+            &nbsp;
+            <form class="inline-form" method="post" th:action="@{/customer/todo/{id}/done(id=${t.id})}">
+                <input type="hidden" name="from" th:value="${from}"/>
+                <button type="submit" class="btn-link-plain tip-top" title="Done"><i class="fas fa-check"></i></button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(list)}"><td colspan="3" class="empty-state">No tasks yet. <a th:href="@{/customer/todo}">Add one</a></td></tr>
+    </tbody>
+</table>
+</body>
+</html>

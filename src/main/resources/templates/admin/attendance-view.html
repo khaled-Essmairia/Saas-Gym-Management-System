@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- view-attendance.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('View Attendance', 'Attendance List', 'fas fa-calendar')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Attendance Table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr><th>#</th><th>Fullname</th><th>Plan</th><th>Attendance Count</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m, it : ${members}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
+                                <td><div class="text-center"
+                                         th:text="${m.planMonths == 0 ? 'Expired' : (m.planMonths == 1 ? '1 Month' : m.planMonths + ' Months')}">1 Month</div></td>
+                                <td><div class="text-center"
+                                         th:text="${m.attendanceCount == 0 ? 'None' : (m.attendanceCount == 1 ? '1 Day' : m.attendanceCount + ' Days')}">None</div></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

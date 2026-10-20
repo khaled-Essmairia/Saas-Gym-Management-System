@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- equipment.php / remove-equipment.php / edit-equipment.php (mode = list | remove | edit) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${mode == 'remove' ? 'Remove Equipment' : (mode == 'edit' ? 'Update Equipment' : 'List Equipment')}, 'Perfect Gym\'s Equipment List', 'fas fa-cogs')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Equipment table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>E. Name</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                                <th>Vendor</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Purchased Date</th>
+                                <th th:unless="${mode == 'list'}">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="e, it : ${equipment}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${e.name}">Treadmill</div></td>
+                                <td><div class="text-center" th:text="${e.description}">Desc</div></td>
+                                <td><div class="text-center" th:text="${e.quantity}">1</div></td>
+                                <td><div class="text-center" th:text="'$' + ${e.amount}">$0</div></td>
+                                <td><div class="text-center" th:text="${e.vendor}">Vendor</div></td>
+                                <td><div class="text-center" th:text="${e.address}">Address</div></td>
+                                <td><div class="text-center" th:text="${e.contact}">000</div></td>
+                                <td><div class="text-center" th:text="${e.date}">2020-01-01</div></td>
+                                <td th:if="${mode == 'edit'}">
+                                    <div class="text-center">
+                                        <a th:href="@{/{a}/equipment/{id}/edit(a=${area},id=${e.id})}"><i class="fas fa-edit"></i> Edit</a>
+                                    </div>
+                                </td>
+                                <td th:if="${mode == 'remove'}">
+                                    <div class="text-center">
+                                        <form class="inline-form confirm-delete" method="post"
+                                              th:action="@{/{a}/equipment/{id}/delete(a=${area},id=${e.id})}"
+                                              th:attr="data-confirm='Remove ' + ${e.name} + '?'">
+                                            <button type="submit" class="btn-link-danger"><i class="fas fa-trash"></i> Remove</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(equipment)}">
+                                <td colspan="10" class="empty-state">No equipment yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

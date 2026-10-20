@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- customer/pages/to-do.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('To-Do', 'To-Do Lists', 'fas fa-pencil-alt')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-plus"></i></span><h5>Add a Task</h5></div>
+                    <div class="widget-content nopadding">
+                        <form th:object="${form}" method="post" th:action="@{/customer/todo}" class="form-horizontal">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('taskDesc')} ? 'error'">
+                                <label class="control-label">Please Enter Your Task :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{taskDesc}" maxlength="30" placeholder="I'll be doing 12 set up and . . ." required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('taskDesc')}" th:errors="*{taskDesc}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Please Select a Status:</label>
+                                <div class="controls">
+                                    <select th:field="*{taskStatus}">
+                                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}">In Progress</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">Add To List</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-tasks"></i></span><h5>My To-Do List</h5></div>
+                    <div class="widget-content nopadding">
+                        <table th:replace="~{customer/todo-table :: table(${todos}, 'todo')}"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- announcement.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Announcement', 'Announcement', 'fas fa-bullhorn')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <a th:href="@{/admin/announcements/manage}" class="btn btn-danger">Manage Your Announcements</a>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-bullhorn"></i></span><h5>Make an Announcement</h5></div>
+                    <div class="widget-content">
+                        <form th:object="${form}" method="post" th:action="@{/admin/announcements}">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('message')} ? 'error'">
+                                <div class="controls">
+                                    <textarea class="span12" th:field="*{message}" rows="6" maxlength="100" placeholder="Enter text ..." required></textarea>
+                                    <span class="field-error" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></span>
+                                    <span class="help-block">Max 100 characters.</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('date')} ? 'error'">
+                                <label><h5>Applied Date: <input type="date" th:field="*{date}" required/></h5></label>
+                                <span class="field-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-large">Publish Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

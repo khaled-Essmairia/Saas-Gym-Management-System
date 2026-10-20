@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- member-status.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Status', 'Member\'s Current Status', 'fas fa-eye')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Status table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fullname</th>
+                                <th>Contact Number</th>
+                                <th>Choosen Service</th>
+                                <th>Plan</th>
+                                <th>Membership Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m, it : ${members}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
+                                <td><div class="text-center" th:text="${m.contact}">000</div></td>
+                                <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
+                                <td><div class="text-center" th:text="${m.plan} + ' Month/s'">1 Month/s</div></td>
+                                <td>
+                                    <div class="text-center" th:switch="${m.status}">
+                                        <span th:case="'Active'"><i class="fas fa-circle" style="color:green;"></i> Active</span>
+                                        <span th:case="'Expired'"><i class="fas fa-circle" style="color:red;"></i> Expired</span>
+                                        <span th:case="*"><i class="fas fa-circle" style="color:orange;"></i> Pending Reg</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

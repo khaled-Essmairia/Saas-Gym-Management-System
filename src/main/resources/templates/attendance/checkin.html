@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- attendance.php: check in / check out of active members -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Manage Attendance', 'Attendance List', 'fas fa-calendar')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Attendance Table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fullname</th>
+                                <th>Contact Number</th>
+                                <th>Choosen Service</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m, it : ${members}" th:with="checked=${today.get(m.userId)}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
+                                <td><div class="text-center" th:text="${m.contact}">000</div></td>
+                                <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
+                                <td th:if="${checked != null}">
+                                    <div class="text-center">
+                                        <span class="label label-inverse" th:text="${checked.currDate + '  ' + checked.currTime}">date</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <form class="inline-form" method="post"
+                                              th:action="@{/{a}/attendance/{id}/check-out(a=${area},id=${m.userId})}">
+                                            <button type="submit" class="btn btn-danger">Check Out <i class="fas fa-clock"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td th:if="${checked == null}">
+                                    <div class="text-center">
+                                        <form class="inline-form" method="post"
+                                              th:action="@{/{a}/attendance/{id}/check-in(a=${area},id=${m.userId})}">
+                                            <button type="submit" class="btn btn-info">Check In <i class="fas fa-map-marker-alt"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(members)}">
+                                <td colspan="5" class="empty-state">No active members.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

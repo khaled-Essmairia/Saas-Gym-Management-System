@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- userpay.php: payment saved with status "Expired" -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Payments', 'Payments', null)}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-info"></i></span><h5>Message</h5></div>
+                    <div class="widget-content">
+                        <div class="error_ex">
+                            <h1>409</h1>
+                            <h3>Looks like you've deactivated the customer's account!</h3>
+                            <p>The selected member's account will no longer be ACTIVATED until the next payment.</p>
+                            <a class="btn btn-danger btn-big" th:href="@{/{a}/payments(a=${area})}">Go Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

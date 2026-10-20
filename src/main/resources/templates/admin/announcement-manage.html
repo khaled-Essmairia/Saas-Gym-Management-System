@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- manage-announcement.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Manage Announcement', 'Manage Announcement', 'fas fa-bullhorn')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <a th:href="@{/admin/announcements}" class="btn btn-info">New Announcement</a>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Announcement table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead><tr><th>#</th><th>Date</th><th>Message</th><th>Manage</th></tr></thead>
+                            <tbody>
+                            <tr th:each="a, it : ${announcements}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${a.date}">date</div></td>
+                                <td><div class="text-center" th:text="${a.message}">msg</div></td>
+                                <td><div class="text-center">
+                                    <form class="inline-form confirm-delete" method="post"
+                                          th:action="@{/admin/announcements/{id}/delete(id=${a.id})}"
+                                          data-confirm="Remove this announcement?">
+                                        <button type="submit" class="btn-link-danger"><i class="fas fa-trash"></i> Remove</button>
+                                    </form>
+                                </div></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(announcements)}"><td colspan="4" class="empty-state">No announcements.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!-- user-payment.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Payment', 'Payment Form', null)}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-money-bill"></i></span><h5>Payments</h5></div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <table class="report-head">
+                                    <tbody>
+                                    <tr><td><img th:src="@{/img/Gym-Logo.png}" alt="Gym Logo" width="175"/></td></tr>
+                                    <tr><td><h4 th:text="${gym.name}">Perfect GYM Club</h4></td></tr>
+                                    <tr><td th:text="${gym.address}">Address</td></tr>
+                                    <tr><td th:text="'Tel: ' + ${gym.phone}">Tel</td></tr>
+                                    <tr><td th:text="'Email: ' + ${gym.email}">Email</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="span7">
+                                <form th:object="${form}" method="post"
+                                      th:action="@{/{a}/payments/{id}(a=${area},id=${member.userId})}">
+                                    <table class="table table-bordered table-invoice">
+                                        <tbody>
+                                        <tr>
+                                            <td class="width30">Member's Fullname:</td>
+                                            <td class="width70"><strong th:text="${member.fullname}">Name</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Service:</td>
+                                            <td><strong th:text="${member.services}">Fitness</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Amount Per Month:</td>
+                                            <td>
+                                                <input id="amount" type="number" min="0" th:field="*{amount}" required/>
+                                                <span class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width30">Plan:</td>
+                                            <td class="width70">
+                                                <select th:field="*{plan}" id="plan" required>
+                                                    <option value="1">One Month</option>
+                                                    <option value="3">Three Month</option>
+                                                    <option value="6">Six Month</option>
+                                                    <option value="12">One Year</option>
+                                                    <option value="0">None-Expired</option>
+                                                </select>
+                                                <span class="field-error" th:if="${#fields.hasErrors('plan')}" th:errors="*{plan}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width30">Member's Status:</td>
+                                            <td class="width70">
+                                                <select th:field="*{status}" required>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Expired">Expired</option>
+                                                </select>
+                                                <span class="field-error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Amount:</td>
+                                            <td><strong id="total">$0</strong></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr/>
+                                    <button class="btn btn-success btn-large" type="submit">Make Payment</button>
+                                    <a th:href="@{/{a}/payments(a=${area})}" class="btn btn-large">Cancel</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    $(function () {
+        function updateTotal() {
+            var amount = parseInt($('#amount').val() || '0', 10);
+            var plan = parseInt($('#plan').val() || '0', 10);
+            $('#total').text('$' + (amount * plan));
+        }
+        $('#amount, #plan').on('input change', updateTotal);
+        updateTotal();
+    });
+</script>
+</body>
+</html>

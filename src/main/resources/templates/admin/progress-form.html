@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- update-progress.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Update Progress', 'Update Customer\'s Progress', 'fas fa-signal')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span><h5>Progress</h5></div>
+                    <div class="widget-content">
+                        <form th:object="${form}" method="post" th:action="@{/admin/progress/{id}(id=${member.userId})}">
+                            <table class="table table-bordered table-invoice">
+                                <tbody>
+                                <tr>
+                                    <td class="width30">Member's Fullname:</td>
+                                    <td class="width70"><strong th:text="${member.fullname}">Name</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Service Taken:</td>
+                                    <td><strong th:text="${member.services}">Fitness</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Initial Weight: (KG)</td>
+                                    <td><input type="number" min="0" th:field="*{iniWeight}" required/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('iniWeight')}" th:errors="*{iniWeight}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Current Weight: (KG)</td>
+                                    <td><input type="number" min="0" th:field="*{currWeight}" required/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('currWeight')}" th:errors="*{currWeight}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Initial Body Type:</td>
+                                    <td><input type="text" maxlength="50" th:field="*{iniBodytype}"/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('iniBodytype')}" th:errors="*{iniBodytype}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Current Body Type:</td>
+                                    <td><input type="text" maxlength="50" th:field="*{currBodytype}"/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('currBodytype')}" th:errors="*{currBodytype}"></span></td>
+                                </tr>
+                                <tr th:if="${member.progressDate != null}">
+                                    <td>Last Updated:</td>
+                                    <td th:text="${member.progressDate}">date</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-primary btn-large" type="submit">Save Changes</button>
+                            <a th:href="@{/admin/progress}" class="btn btn-large">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

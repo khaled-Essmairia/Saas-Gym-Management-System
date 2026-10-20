@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- view-member-report.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Member\'s Report', 'Member\'s Report', 'fas fa-file')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div th:replace="~{fragments/report :: member(${member}, false)}"></div>
+                <div class="text-center no-print">
+                    <button class="btn btn-danger" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                    <a th:href="@{/admin/reports/members}" class="btn">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

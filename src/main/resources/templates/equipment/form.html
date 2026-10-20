@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- equipment-entry.php (new) and edit-equipmentform.php (update) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${equipmentId == null ? 'Add Equipment' : 'Update Equipment'}, ${equipmentId == null ? 'Equipment Entry Form' : 'Update Equipment Details'}, null)}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <form th:object="${form}" method="post" class="form-horizontal"
+              th:action="${equipmentId == null} ? @{/{a}/equipment/new(a=${area})} : @{/{a}/equipment/{id}/edit(a=${area},id=${equipmentId})}">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Equipment-info</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('name')} ? 'error'">
+                                <label class="control-label">Equipment :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{name}" placeholder="Equipment Name" maxlength="30" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('description')} ? 'error'">
+                                <label class="control-label">Description :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{description}" placeholder="Short Description" maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('date')} ? 'error'">
+                                <label class="control-label">Date of Purchase :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" th:field="*{date}" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
+                                    <span class="help-block">Please mention the date of purchase</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('quantity')} ? 'error'">
+                                <label class="control-label">Quantity :</label>
+                                <div class="controls">
+                                    <input type="number" min="1" class="span5" th:field="*{quantity}" id="quantity" placeholder="Equipment Qty" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Other Details</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('vendor')} ? 'error'">
+                                <label class="control-label">Vendor :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{vendor}" placeholder="Vendor" maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('vendor')}" th:errors="*{vendor}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('address')} ? 'error'">
+                                <label class="control-label">Address :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{address}" placeholder="Vendor Address" maxlength="20" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('contact')} ? 'error'">
+                                <label class="control-label">Contact Number</label>
+                                <div class="controls">
+                                    <input type="text" class="span8" th:field="*{contact}" maxlength="15" placeholder="9876543210" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}"></span>
+                                    <span class="help-block blue span8">(999) 999-9999</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('amount')} ? 'error'">
+                                <label class="control-label">Cost Per Item :</label>
+                                <div class="controls">
+                                    <div class="input-append">
+                                        <span class="add-on">$</span>
+                                        <input type="number" min="0" placeholder="269" th:field="*{amount}" id="amount" class="span11" required/>
+                                    </div>
+                                    <span class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                                    <span class="help-block">Total cost = cost per item &times; quantity: <strong id="total">$0</strong></span>
+                                </div>
+                            </div>
+                            <div class="form-actions text-center">
+                                <button type="submit" class="btn btn-success"
+                                        th:text="${equipmentId == null ? 'Submit Details' : 'Update Details'}">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    $(function () {
+        function updateTotal() {
+            var cost = parseInt($('#amount').val() || '0', 10);
+            var qty = parseInt($('#quantity').val() || '0', 10);
+            $('#total').text('$' + (cost * qty));
+        }
+        $('#amount, #quantity').on('input change', updateTotal);
+        updateTotal();
+    });
+</script>
+</body>
+</html>

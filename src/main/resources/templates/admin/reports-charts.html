@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- reports.php: chart representation -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Chart Representation', 'Earning and Expenses Report', 'fas fa-chart-bar')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="widget-box">
+                <div class="widget-title bg_lg"><span class="icon"><i class="fas fa-file"></i></span><h5>Earnings &amp; Expenses</h5></div>
+                <div class="widget-content"><div id="earnings_chart" style="width:100%; height:200px;"></div></div>
+            </div>
+        </div>
+
+        <h1 class="text-center">Registered Member's Report <i class="fas fa-chart-bar"></i></h1>
+        <hr/>
+        <div class="row-fluid">
+            <div class="widget-box">
+                <div class="widget-title bg_ly"><span class="icon"><i class="fas fa-users"></i></span><h5>Members by Gender</h5></div>
+                <div class="widget-content"><div id="gender_chart" class="chart-box"></div></div>
+            </div>
+        </div>
+
+        <h1 class="text-center">Services Report <i class="fas fa-chart-bar"></i></h1>
+        <hr/>
+        <div class="row-fluid">
+            <div class="widget-box">
+                <div class="widget-title bg_lb"><span class="icon"><i class="fas fa-dumbbell"></i></span><h5>Members per Service</h5></div>
+                <div class="widget-content"><div id="services_chart" class="chart-box"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:src="@{/js/gym-charts.js}"></script>
+<script th:inline="javascript">
+    GymCharts.earnings('earnings_chart', /*[[${@statsService.totalEarnings()}]]*/ 0, /*[[${@statsService.totalExpenses()}]]*/ 0);
+    GymCharts.donut('gender_chart', ['Gender', 'Number'], /*[[${@statsService.membersByGender()}]]*/ {});
+    GymCharts.columns('services_chart', ['Services', 'Number'], /*[[${@statsService.membersByService()}]]*/ {});
+</script>
+</body>
+</html>

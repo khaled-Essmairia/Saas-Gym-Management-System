@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!-- staff/staff-pages/index.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Staff')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content" th:with="stats=${@statsService}">
+    <div id="content-header">
+        <div id="breadcrumb"><a th:href="@{/staff/dashboard}" title="You're right here" class="tip-bottom"><i class="fas fa-home"></i> Home</a></div>
+    </div>
+    <div class="container-fluid">
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <div class="quick-actions_homepage">
+            <ul class="quick-actions">
+                <li class="bg_lb span3"><a th:href="@{/staff/members}" style="font-size: 16px;"><i class="fas fa-users"></i> <span class="label label-important" th:text="${stats.memberCount()}">0</span> Registered Members</a></li>
+                <li class="bg_ls span3"><a th:href="@{/staff/member-status}" style="font-size: 16px;"><i class="fas fa-user-check"></i> <span class="label label-important" th:text="${stats.activeMemberCount()}">0</span> Active Members</a></li>
+                <li class="bg_lg span3"><a th:href="@{/staff/equipment}" style="font-size: 16px;"><i class="fas fa-dumbbell"></i> <span class="label label-important" th:text="${stats.equipmentCount()}">0</span> Equipment</a></li>
+                <li class="bg_lo span2"><a th:href="@{/staff/attendance}" style="font-size: 16px;"><i class="fas fa-calendar-check"></i> <span class="label label-important" th:text="${stats.presentToday()}">0</span> Present Today</a></li>
+            </ul>
+        </div>
+        <hr/>
+        <div class="row-fluid">
+            <div class="span6">
+                <div th:replace="~{fragments/widgets :: announcements(${announcements}, null)}"></div>
+            </div>
+            <div class="span6">
+                <div th:replace="~{fragments/widgets :: todos(${todos})}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

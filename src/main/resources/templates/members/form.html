@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- member-entry.php (new) and edit-memberform.php (update) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${member == null ? 'Add Members' : 'Update Member'}, ${member == null ? 'Member Entry Form' : 'Update Member Details'}, null)}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <form th:object="${form}" method="post" class="form-horizontal"
+              th:action="${member == null} ? @{/{a}/members/new(a=${area})} : @{/{a}/members/{id}/edit(a=${area},id=${member.userId})}">
+            <div class="row-fluid">
+                <!-- ============ Personal info ============ -->
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Personal-info</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('fullname')} ? 'error'">
+                                <label class="control-label">Full Name :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{fullname}" placeholder="Fullname" maxlength="20" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('username')} ? 'error'">
+                                <label class="control-label">Username :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{username}" placeholder="Username" maxlength="20" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('password')} ? 'error'">
+                                <label class="control-label">Password :</label>
+                                <div class="controls" th:if="${member == null}">
+                                    <input type="password" class="span11" th:field="*{password}" placeholder="**********" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                                    <span class="help-block">Note: The given information will create an account for this particular member</span>
+                                </div>
+                                <div class="controls" th:unless="${member == null}">
+                                    <input type="password" class="span11" disabled="disabled" placeholder="**********"/>
+                                    <span class="help-block">Note: Only the members are allowed to change their password until and unless it's an emergency.</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Gender :</label>
+                                <div class="controls">
+                                    <select th:field="*{gender}" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('dor')} ? 'error'">
+                                <label class="control-label">D.O.R :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" th:field="*{dor}" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('dor')}" th:errors="*{dor}"></span>
+                                    <span class="help-block">Date of registration</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('plan')} ? 'error'">
+                                <label class="control-label">Plans :</label>
+                                <div class="controls">
+                                    <select th:field="*{plan}" id="plan" required>
+                                        <option value="1">One Month</option>
+                                        <option value="3">Three Month</option>
+                                        <option value="6">Six Month</option>
+                                        <option value="12">One Year</option>
+                                    </select>
+                                    <span class="field-error" th:if="${#fields.hasErrors('plan')}" th:errors="*{plan}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ Contact + service ============ -->
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Contact Details</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('contact')} ? 'error'">
+                                <label class="control-label">Contact Number</label>
+                                <div class="controls">
+                                    <input type="text" class="span8" th:field="*{contact}" placeholder="9876543210" maxlength="15" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}"></span>
+                                    <span class="help-block blue span8">(999) 999-9999</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('address')} ? 'error'">
+                                <label class="control-label">Address :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{address}" placeholder="Address" maxlength="20" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Service Details</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('services')} ? 'error'">
+                                <label class="control-label">Services</label>
+                                <div class="controls">
+                                    <label th:each="r : ${rates}">
+                                        <input type="radio" th:field="*{services}" th:value="${r.name}" th:attr="data-rate=${r.charge}" class="service-radio"/>
+                                        <span th:text="${r.name}">Fitness</span> <small th:text="'- $' + ${r.charge} + ' per month'">- $55 per month</small>
+                                    </label>
+                                    <span class="field-error" th:if="${#fields.hasErrors('services')}" th:errors="*{services}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('amount')} ? 'error'">
+                                <label class="control-label">Amount Per Month</label>
+                                <div class="controls">
+                                    <div class="input-append">
+                                        <span class="add-on">$</span>
+                                        <input type="number" min="0" placeholder="55" th:field="*{amount}" id="amount" class="span11" required/>
+                                    </div>
+                                    <span class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                                    <span class="help-block">Total charged = amount per month &times; plan: <strong id="total">$0</strong></span>
+                                </div>
+                            </div>
+                            <div class="form-actions text-center">
+                                <button type="submit" class="btn btn-success"
+                                        th:text="${member == null ? 'Submit Member Details' : 'Update Member Details'}">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    // Pre-fill the monthly amount from the service rate and show the total
+    $(function () {
+        function updateTotal() {
+            var amount = parseInt($('#amount').val() || '0', 10);
+            var plan = parseInt($('#plan').val() || '1', 10);
+            $('#total').text('$' + (amount * plan));
+        }
+        $('.service-radio').on('change', function () {
+            $('#amount').val($(this).data('rate'));
+            updateTotal();
+        });
+        $('#amount, #plan').on('input change', updateTotal);
+        updateTotal();
+    });
+</script>
+</body>
+</html>

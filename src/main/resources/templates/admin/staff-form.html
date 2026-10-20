@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!-- staffs-entry.php (new) and edit-staff-form.php (update) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+<div th:replace="~{fragments/layout :: contentHeader(${staffId == null ? 'Add Staff' : 'Update Staff'}, ${staffId == null ? 'Gym Staff Entry Form' : 'Update Staff Details'}, 'fas fa-briefcase')}"></div>    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-user-plus"></i></span><h5>Staff Details</h5></div>
+                    <div class="widget-content nopadding">
+                        <form th:object="${form}" method="post" class="form-horizontal"
+                              th:action="${staffId == null} ? @{/admin/staff/new} : @{/admin/staff/{id}/edit(id=${staffId})}">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('fullname')} ? 'error'">
+                                <label class="control-label">Staff's Fullname</label>
+                                <div class="controls">
+                                    <input type="text" th:field="*{fullname}" maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('username')} ? 'error'">
+                                <label class="control-label">Username</label>
+                                <div class="controls">
+                                    <input type="text" th:field="*{username}" maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                                </div>
+                            </div>
+                            <th:block th:if="${staffId == null}">
+                                <div class="control-group" th:classappend="${#fields.hasErrors('password')} ? 'error'">
+                                    <label class="control-label">Password</label>
+                                    <div class="controls">
+                                        <input type="password" th:field="*{password}" required/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" th:classappend="${#fields.hasErrors('password2')} ? 'error'">
+                                    <label class="control-label">Confirm Password</label>
+                                    <div class="controls">
+                                        <input type="password" th:field="*{password2}" required/>
+                                        <span class="field-error" th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}"></span>
+                                    </div>
+                                </div>
+                            </th:block>
+                            <div class="control-group" th:unless="${staffId == null}">
+                                <label class="control-label">Password</label>
+                                <div class="controls">
+                                    <input type="password" disabled="disabled" placeholder="**********"/>
+                                    <span class="help-block">Note: Only the staff members are allowed to change their password until and unless it's an emergency.</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('email')} ? 'error'">
+                                <label class="control-label">Email ID</label>
+                                <div class="controls">
+                                    <input type="email" th:field="*{email}" maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('address')} ? 'error'">
+                                <label class="control-label">Address</label>
+                                <div class="controls">
+                                    <input type="text" th:field="*{address}" maxlength="20" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('designation')} ? 'error'">
+                                <label class="control-label">Designation</label>
+                                <div class="controls">
+                                    <select th:field="*{designation}">
+                                        <option th:each="d : ${designations}" th:value="${d}" th:text="${d}">Cashier</option>
+                                    </select>
+                                    <span class="field-error" th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Gender</label>
+                                <div class="controls">
+                                    <select th:field="*{gender}">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('contact')} ? 'error'">
+                                <label class="control-label">Contact Number</label>
+                                <div class="controls">
+                                    <input type="text" th:field="*{contact}" maxlength="15" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}"></span>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <a th:href="@{/admin/staff}" class="btn">Back</a>
+                                <button type="submit" class="btn btn-primary"
+                                        th:text="${staffId == null ? 'Add Staff Member' : 'Update Staff Details'}">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

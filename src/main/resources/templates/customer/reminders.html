@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- customer/pages/customer-reminder.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Reminders', 'Reminders', 'fas fa-clock')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="alert alert-danger alert-block" th:if="${member.reminderSent}">
+                    <h4 class="alert-heading">ALERT</h4>
+                    <p>This is to notify you that your current membership program is going to expire soon.
+                        Please clear up your payments before your due dates.<br/>
+                        IT IS IMPORTANT THAT YOU CLEAR YOUR DUES ON TIME IN ORDER TO AVOID SERVICE DISRUPTIONS.</p>
+                    <hr/>
+                    <p class="mb-0">We value you as our customer and look forward to continue serving you in the future.</p>
+                </div>
+                <div class="alert alert-info alert-block" th:unless="${member.reminderSent}">
+                    <h4 class="alert-heading">NO REMINDERS YET!</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

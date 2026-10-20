@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- customer-progress.php + search-result-progress.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Manage Customer Progress', 'Update Customer\'s Progress', 'fas fa-signal')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span12">
+                <form id="custom-search-form" method="get" th:action="@{/admin/progress}" class="form-search form-horizontal pull-right">
+                    <div class="input-append">
+                        <input type="text" class="search-query" placeholder="Search" name="search" th:value="${search}" required/>
+                        <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <a th:if="${searching}" th:href="@{/admin/progress}" class="btn btn-mini">Show all</a>
+                </form>
+
+                <div class="widget-box" th:if="${searching and #lists.isEmpty(members)}">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-info"></i></span><h5>Error Message</h5></div>
+                    <div class="widget-content">
+                        <div class="error_ex">
+                            <h1>403</h1>
+                            <h3>Opps, Results Not Found!!</h3>
+                            <p>It seems like there's no such record available in our database.</p>
+                            <a class="btn btn-danger btn-big" th:href="@{/admin/progress}">Go Back</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-box" th:unless="${searching and #lists.isEmpty(members)}">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Member table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr><th>#</th><th>Fullname</th><th>Choosen Service</th><th>Plan</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m, it : ${members}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
+                                <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
+                                <td><div class="text-center" th:text="${m.plan} + ' Month/s'">1 Month/s</div></td>
+                                <td><div class="text-center">
+                                    <a th:href="@{/admin/progress/{id}(id=${m.userId})}" class="btn btn-warning">Update Progress</a>
+                                </div></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

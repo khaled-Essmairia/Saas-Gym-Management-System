@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- Error page (404, 500, ...) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gym System - Error</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/matrix-style.css}"/>
+    <link rel="stylesheet" th:href="@{/font-awesome/css/all.css}"/>
+</head>
+<body style="background:#2E363F">
+<div class="container" style="margin-top:60px">
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"><i class="fas fa-info"></i></span><h5>Error Message</h5></div>
+        <div class="widget-content">
+            <div class="error_ex">
+                <h1 style="color:maroon;" th:text="${status}">Error</h1>
+                <h3 th:text="${status == 404 ? 'Page or record not found' : 'Something went wrong'}">Something went wrong</h3>
+                <p th:if="${status != 404}">Please try again. If the problem continues, contact the administrator.</p>
+                <a class="btn btn-warning btn-big" href="javascript:history.back()">Go Back</a>
+                <a class="btn btn-inverse btn-big" th:href="@{/}">Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- members.php / remove-member.php / edit-member.php (mode = list | remove | edit) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${mode == 'remove' ? 'Remove Members' : (mode == 'edit' ? 'Update Members' : 'Registered Members')}, ${mode == 'remove' ? 'Remove Members' : 'Registered Members List'}, 'fas fa-users')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span>
+                        <h5>Member table</h5>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fullname</th>
+                                <th>Username</th>
+                                <th th:unless="${mode == 'remove'}">Gender</th>
+                                <th>Contact Number</th>
+                                <th>D.O.R</th>
+                                <th>Address</th>
+                                <th>Amount</th>
+                                <th>Choosen Service</th>
+                                <th>Plan</th>
+                                <th th:unless="${mode == 'list'}">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m, it : ${members}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
+                                <td><div class="text-center" th:text="'@' + ${m.username}">@user</div></td>
+                                <td th:unless="${mode == 'remove'}"><div class="text-center" th:text="${m.gender}">Male</div></td>
+                                <td><div class="text-center" th:text="${m.contact}">000</div></td>
+                                <td><div class="text-center" th:text="${m.dor}">2020-01-01</div></td>
+                                <td><div class="text-center" th:text="${m.address}">Address</div></td>
+                                <td><div class="text-center" th:text="'$' + ${m.amount}">$0</div></td>
+                                <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
+                                <td><div class="text-center" th:text="${m.plan} + ' Month/s'">1 Month/s</div></td>
+                                <td th:if="${mode == 'edit'}">
+                                    <div class="text-center">
+                                        <a th:href="@{/{a}/members/{id}/edit(a=${area},id=${m.userId})}"><i class="fas fa-edit"></i> Edit</a>
+                                    </div>
+                                </td>
+                                <td th:if="${mode == 'remove'}">
+                                    <div class="text-center">
+                                        <form class="inline-form confirm-delete" method="post"
+                                              th:action="@{/{a}/members/{id}/delete(a=${area},id=${m.userId})}"
+                                              th:attr="data-confirm='Remove member ' + ${m.fullname} + '?'">
+                                            <button type="submit" class="btn-link-danger"><i class="fas fa-trash"></i> Remove</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(members)}">
+                                <td colspan="11" class="empty-state">No members yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

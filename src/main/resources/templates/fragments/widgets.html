@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- Widgets shared by the dashboards -->
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Announcement list -->
+<div th:fragment="announcements(list, viewAllUrl)" class="widget-box">
+    <div class="widget-title bg_ly"><span class="icon"><i class="fas fa-bullhorn"></i></span><h5>Gym Announcement</h5></div>
+    <div class="widget-content nopadding">
+        <ul class="recent-posts">
+            <li th:each="a : ${list}">
+                <div class="user-thumb"><img width="70" height="40" alt="User" th:src="@{/img/demo/av1.jpg}"/></div>
+                <div class="article-post">
+                    <span class="user-info" th:text="'By: System Administrator / Date: ' + ${a.date}">By</span>
+                    <p><a href="#" th:text="${a.message}">Message</a></p>
+                </div>
+            </li>
+            <li th:if="${#lists.isEmpty(list)}"><p class="empty-state">No announcements yet.</p></li>
+            <li th:if="${viewAllUrl != null}"><a th:href="@{${viewAllUrl}}" class="btn btn-warning btn-mini">View All</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- All customers' to-do items (read only) -->
+<div th:fragment="todos(list)" class="widget-box">
+    <div class="widget-title"><span class="icon"><i class="fas fa-tasks"></i></span><h5>Customer's To-Do Lists</h5></div>
+    <div class="widget-content">
+        <div class="todo">
+            <ul>
+                <li class="clearfix" th:each="t : ${list}">
+                    <div class="txt">
+                        <span th:text="${t.taskDesc}">Task</span>
+                        <span th:if="${t.taskStatus == 'Pending'}" class="by label label-info">Pending</span>
+                        <span th:unless="${t.taskStatus == 'Pending'}" class="by label label-success">In Progress</span>
+                    </div>
+                </li>
+                <li th:if="${#lists.isEmpty(list)}" class="clearfix"><div class="txt">No tasks.</div></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

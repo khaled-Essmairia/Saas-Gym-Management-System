@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- staffs.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System Admin')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Staff Members', 'GYM\'s Staff List', 'fas fa-briefcase')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <a th:href="@{/admin/staff/new}" class="btn btn-primary">Add Staff Members</a>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Staff table</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th><th>Fullname</th><th>Username</th><th>Gender</th><th>Designation</th>
+                                <th>Email</th><th>Address</th><th>Contact</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="s, it : ${staffs}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${s.fullname}">Name</div></td>
+                                <td><div class="text-center" th:text="'@' + ${s.username}">@user</div></td>
+                                <td><div class="text-center" th:text="${s.gender}">Male</div></td>
+                                <td><div class="text-center" th:text="${s.designation}">Trainer</div></td>
+                                <td><div class="text-center" th:text="${s.email}">mail</div></td>
+                                <td><div class="text-center" th:text="${s.address}">addr</div></td>
+                                <td><div class="text-center" th:text="${s.contact}">000</div></td>
+                                <td><div class="text-center">
+                                    <a th:href="@{/admin/staff/{id}/edit(id=${s.userId})}"><i class="fas fa-edit" style="color:#28b779"></i> Edit</a> |
+                                    <form class="inline-form confirm-delete" method="post"
+                                          th:action="@{/admin/staff/{id}/delete(id=${s.userId})}"
+                                          th:attr="data-confirm='Remove staff member ' + ${s.fullname} + '?'">
+                                        <button type="submit" class="btn-link-danger"><i class="fas fa-trash"></i> Remove</button>
+                                    </form>
+                                </div></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(staffs)}"><td colspan="9" class="empty-state">No staff yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

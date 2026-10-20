@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+  Shared page parts (replaces includes/topheader.php, includes/sidebar.php and the
+  repeated <head>, footer and <script> blocks of every PHP page).
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- ======================= <head> ======================= -->
+<head th:fragment="head(title)">
+    <title th:text="${title}">Gym System</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/matrix-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/matrix-media.css}"/>
+    <link rel="stylesheet" th:href="@{/font-awesome/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gym.css}"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+<!-- ======================= Header + top menu ======================= -->
+<th:block th:fragment="header">
+    <div id="header">
+        <h1>
+            <a th:href="@{/{a}/dashboard(a=${area})}"
+               th:text="${area == 'admin' ? 'Perfect Gym Admin' : (area == 'staff' ? 'Perfect Gym Staff' : 'Perfect Gym System')}">Perfect Gym</a>
+        </h1>
+    </div>
+
+    <div id="user-nav" class="navbar navbar-inverse">
+        <ul class="nav right">
+            <li class="dropdown" id="profile-messages">
+                <a href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="text">Welcome <span sec:authentication="principal.displayName">User</span></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li th:if="${area == 'customer'}"><a th:href="@{/customer/report}"><i class="fas fa-user"></i> My Report</a></li>
+                    <li th:if="${area == 'customer'}" class="divider"></li>
+                    <li th:if="${area == 'customer'}"><a th:href="@{/customer/todo}"><i class="fas fa-check"></i> My Tasks</a></li>
+                    <li th:if="${area == 'customer'}" class="divider"></li>
+                    <li><a href="#" onclick="document.getElementById('logout-form').submit(); return false;"><i class="fas fa-key"></i> Log Out</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                    <i class="fas fa-power-off"></i> <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+        <form id="logout-form" th:action="@{/{a}/logout(a=${area})}" method="post" style="display:none"></form>
+    </div>
+</th:block>
+
+<!-- ======================= Sidebar ======================= -->
+<div th:fragment="sidebar" id="sidebar">
+    <a href="#" class="visible-phone"><i class="fas fa-home"></i> Dashboard</a>
+
+    <!-- Admin menu (admin/includes/sidebar.php) -->
+    <ul th:if="${area == 'admin'}">
+        <th:block th:if="${license != null and license.valid}">
+        <li th:classappend="${page == 'dashboard'} ? 'active'"><a th:href="@{/admin/dashboard}"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+        <li class="submenu" th:classappend="${page != null and page.startsWith('members')} ? 'active open'">
+            <a href="#"><i class="fas fa-users"></i> <span>Manage Members</span> <span class="label label-important" th:text="${@statsService.memberCount()}">0</span></a>
+            <ul>
+                <li th:classappend="${page == 'members'} ? 'active'"><a th:href="@{/admin/members}"><i class="fas fa-arrow-right"></i> List All Members</a></li>
+                <li th:classappend="${page == 'members-entry'} ? 'active'"><a th:href="@{/admin/members/new}"><i class="fas fa-arrow-right"></i> Member Entry Form</a></li>
+                <li th:classappend="${page == 'members-remove'} ? 'active'"><a th:href="@{/admin/members/remove}"><i class="fas fa-arrow-right"></i> Remove Member</a></li>
+                <li th:classappend="${page == 'members-update'} ? 'active'"><a th:href="@{/admin/members/edit}"><i class="fas fa-arrow-right"></i> Update Member Details</a></li>
+            </ul>
+        </li>
+        <li class="submenu" th:classappend="${page != null and page.endsWith('-equip')} ? 'active open'">
+            <a href="#"><i class="fas fa-dumbbell"></i> <span>Gym Equipment</span> <span class="label label-important" th:text="${@statsService.equipmentCount()}">0</span></a>
+            <ul>
+                <li th:classappend="${page == 'list-equip'} ? 'active'"><a th:href="@{/admin/equipment}"><i class="fas fa-arrow-right"></i> List Gym Equipment</a></li>
+                <li th:classappend="${page == 'add-equip'} ? 'active'"><a th:href="@{/admin/equipment/new}"><i class="fas fa-arrow-right"></i> Add Equipment</a></li>
+                <li th:classappend="${page == 'remove-equip'} ? 'active'"><a th:href="@{/admin/equipment/remove}"><i class="fas fa-arrow-right"></i> Remove Equipment</a></li>
+                <li th:classappend="${page == 'update-equip'} ? 'active'"><a th:href="@{/admin/equipment/edit}"><i class="fas fa-arrow-right"></i> Update Equipment Details</a></li>
+            </ul>
+        </li>
+        <li class="submenu" th:classappend="${page == 'attendance' or page == 'view-attendance'} ? 'active open'">
+            <a href="#"><i class="fas fa-calendar-alt"></i> <span>Attendance</span></a>
+            <ul>
+                <li th:classappend="${page == 'attendance'} ? 'active'"><a th:href="@{/admin/attendance}"><i class="fas fa-arrow-right"></i> Check In/Out</a></li>
+                <li th:classappend="${page == 'view-attendance'} ? 'active'"><a th:href="@{/admin/attendance/view}"><i class="fas fa-arrow-right"></i> View</a></li>
+            </ul>
+        </li>
+        <li th:classappend="${page == 'manage-customer-progress'} ? 'active'"><a th:href="@{/admin/progress}"><i class="fas fa-tasks"></i> <span>Manage Customer Progress</span></a></li>
+        <li th:classappend="${page == 'member-status'} ? 'active'"><a th:href="@{/admin/member-status}"><i class="fas fa-eye"></i> <span>Member's Status</span></a></li>
+        <li th:classappend="${page == 'payment'} ? 'active'"><a th:href="@{/admin/payments}"><i class="fas fa-hand-holding-usd"></i> <span>Payments</span></a></li>
+        <li th:classappend="${page == 'announcement'} ? 'active'"><a th:href="@{/admin/announcements}"><i class="fas fa-bullhorn"></i> <span>Announcement</span></a></li>
+        <li th:classappend="${page == 'staff-management'} ? 'active'"><a th:href="@{/admin/staff}"><i class="fas fa-briefcase"></i> <span>Staff Management</span></a></li>
+        <li class="submenu" th:classappend="${page == 'chart' or page == 'member-repo' or page == 'c-p-r'} ? 'active open'">
+            <a href="#"><i class="fas fa-file"></i> <span>Reports</span></a>
+            <ul>
+                <li th:classappend="${page == 'chart'} ? 'active'"><a th:href="@{/admin/reports/charts}"><i class="fas fa-arrow-right"></i> Chart Representation</a></li>
+                <li th:classappend="${page == 'member-repo'} ? 'active'"><a th:href="@{/admin/reports/members}"><i class="fas fa-arrow-right"></i> Members Report</a></li>
+                <li th:classappend="${page == 'c-p-r'} ? 'active'"><a th:href="@{/admin/reports/progress}"><i class="fas fa-arrow-right"></i> Customer Progress Report</a></li>
+            </ul>
+        </li>
+        </th:block>
+        <li th:classappend="${page == 'license'} ? 'active'"><a th:href="@{/admin/license}"><i class="fas fa-key"></i> <span>License Management</span></a></li>
+    </ul>
+
+    <!-- Staff menu (staff/includes/sidebar.php) -->
+    <ul th:if="${license != null and license.valid and area == 'staff'}">
+        <li th:classappend="${page == 'dashboard'} ? 'active'"><a th:href="@{/staff/dashboard}"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+        <li class="submenu" th:classappend="${page != null and page.startsWith('members')} ? 'active open'">
+            <a href="#"><i class="fas fa-users"></i> <span>Manage Members</span></a>
+            <ul>
+                <li th:classappend="${page == 'members'} ? 'active'"><a th:href="@{/staff/members}">List All Members</a></li>
+                <li th:classappend="${page == 'members-entry'} ? 'active'"><a th:href="@{/staff/members/new}">Member Entry Form</a></li>
+                <li th:classappend="${page == 'members-remove'} ? 'active'"><a th:href="@{/staff/members/remove}">Remove Member</a></li>
+                <li th:classappend="${page == 'members-update'} ? 'active'"><a th:href="@{/staff/members/edit}">Update Member Details</a></li>
+            </ul>
+        </li>
+        <li class="submenu" th:classappend="${page != null and page.endsWith('-equip')} ? 'active open'">
+            <a href="#"><i class="fas fa-cogs"></i> <span>Gym Equipment</span></a>
+            <ul>
+                <li th:classappend="${page == 'list-equip'} ? 'active'"><a th:href="@{/staff/equipment}">List Gym Equipment</a></li>
+                <li th:classappend="${page == 'add-equip'} ? 'active'"><a th:href="@{/staff/equipment/new}">Add Equipment</a></li>
+                <li th:classappend="${page == 'remove-equip'} ? 'active'"><a th:href="@{/staff/equipment/remove}">Remove Equipment</a></li>
+                <li th:classappend="${page == 'update-equip'} ? 'active'"><a th:href="@{/staff/equipment/edit}">Update Equipment Details</a></li>
+            </ul>
+        </li>
+        <li th:classappend="${page == 'member-status'} ? 'active'"><a th:href="@{/staff/member-status}"><i class="fas fa-eye"></i> <span>Member's Status</span></a></li>
+        <li th:classappend="${page == 'payment'} ? 'active'"><a th:href="@{/staff/payments}"><i class="fas fa-money-bill"></i> <span>Payments</span></a></li>
+        <li th:classappend="${page == 'attendance'} ? 'active'"><a th:href="@{/staff/attendance}"><i class="fas fa-calendar-alt"></i> <span>Manage Attendance</span></a></li>
+    </ul>
+
+    <!-- Customer menu (customer/includes/sidebar.php) -->
+    <ul th:if="${license != null and license.valid and area == 'customer'}">
+        <li th:classappend="${page == 'dashboard'} ? 'active'"><a th:href="@{/customer/dashboard}"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+        <li th:classappend="${page == 'todo'} ? 'active'"><a th:href="@{/customer/todo}"><i class="fas fa-pencil-alt"></i> <span>To-Do</span></a></li>
+        <li th:classappend="${page == 'reminder'} ? 'active'"><a th:href="@{/customer/reminders}"><i class="fas fa-clock"></i> <span>Reminders</span></a></li>
+        <li th:classappend="${page == 'announcement'} ? 'active'"><a th:href="@{/customer/announcements}"><i class="fas fa-bullhorn"></i> <span>Announcement</span></a></li>
+        <li th:classappend="${page == 'report'} ? 'active'"><a th:href="@{/customer/report}"><i class="fas fa-file"></i> <span>Reports</span></a></li>
+    </ul>
+</div>
+
+<!-- ======================= Breadcrumb + page title ======================= -->
+<div th:fragment="contentHeader(crumb, heading, icon)" id="content-header">
+    <div id="breadcrumb">
+        <a th:href="@{/{a}/dashboard(a=${area})}" title="Go to Home" class="tip-bottom"><i class="fas fa-home"></i> Home</a>
+        <a href="#" class="current" th:text="${crumb}">Page</a>
+    </div>
+    <h1 class="text-center"><span th:text="${heading}">Title</span> <i th:if="${icon != null}" th:class="${icon}"></i></h1>
+</div>
+
+<!-- ======================= Flash messages ======================= -->
+<th:block th:fragment="alerts">
+    <div th:if="${success}" class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <span th:text="${success}">Saved</span>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <span th:text="${error}">Error</span>
+    </div>
+</th:block>
+
+<!-- ======================= Footer + scripts ======================= -->
+<th:block th:fragment="footer">
+    <div class="row-fluid">
+        <div id="footer" class="span12"><span th:text="${currentYear}">2026</span> &copy; Developed By Naseeb Bajracharya</div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.ui.custom.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/matrix.js}"></script>
+    <script>
+        // Ask before any "remove" / "delete" action
+        $(document).on('submit', 'form.confirm-delete', function () {
+            return confirm($(this).data('confirm') || 'Are you sure you want to remove this record?');
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

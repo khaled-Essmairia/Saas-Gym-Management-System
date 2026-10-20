@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- customer/pages/index.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div id="content-header">
+        <div id="breadcrumb"><a th:href="@{/customer/dashboard}" title="You're right here" class="tip-bottom"><i class="fas fa-home"></i> Home</a></div>
+    </div>
+    <div class="container-fluid">
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-tasks"></i></span><h5>My To-Do List</h5></div>
+                    <div class="widget-content nopadding">
+                        <table th:replace="~{customer/todo-table :: table(${todos}, 'dashboard')}"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div th:replace="~{fragments/widgets :: announcements(${announcements}, '/customer/announcements')}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

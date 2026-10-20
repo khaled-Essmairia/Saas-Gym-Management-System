@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- userpay.php: payment receipt (status Active) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<link rel="stylesheet" th:href="@{/css/receipt.css}"/>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Payments', 'Payments', null)}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <table class="body-wrap">
+            <tbody>
+            <tr>
+                <td></td>
+                <td class="container" width="600">
+                    <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                            <td class="content-wrap aligncenter print-container">
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                    <tr><td class="content-block"><h3 class="text-center">Payment Receipt</h3></td></tr>
+                                    <tr>
+                                        <td class="content-block">
+                                            <table class="invoice">
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div style="float:left">
+                                                            Invoice #<span th:text="${payment.invoiceNumber}">GMS_1</span><br/>
+                                                            <span th:text="${gym.address}">Address</span>
+                                                        </div>
+                                                        <div style="float:right">
+                                                            Last Payment: <span th:text="${payment.previousPaidDate != null ? payment.previousPaidDate : 'New Member'}">date</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center" style="font-size:14px;">
+                                                        <b>Member: <span th:text="${payment.member.fullname}">Name</span></b><br/>
+                                                        Paid On: <span th:text="${#temporals.format(payment.paidOn, 'MMMM d, yyyy - h:mm a')}">date</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="invoice-items" cellpadding="0" cellspacing="0">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td><b>Service Taken</b></td>
+                                                                <td class="alignright"><b>Valid Upto</b></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td th:text="${payment.member.services}">Fitness</td>
+                                                                <td class="alignright" th:text="${payment.plan} + ' Month/s'">1 Month/s</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Charge Per Month</td>
+                                                                <td class="alignright" th:text="'$' + ${payment.monthlyAmount}">$0</td>
+                                                            </tr>
+                                                            <tr class="total">
+                                                                <td class="alignright" width="80%">Total Amount</td>
+                                                                <td class="alignright" th:text="'$' + ${payment.total}">$0</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="content-block text-center">
+                                            We sincerely appreciate your promptness regarding all payments from your side.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table width="100%" class="no-print">
+                        <tbody>
+                        <tr>
+                            <td class="aligncenter content-block">
+                                <button class="btn btn-danger" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                                <a class="btn" th:href="@{/{a}/payments(a=${area})}">Back to Payments</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

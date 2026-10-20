@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- Login pages: index.php (admin), staff/index.php, customer/index.php (+ "Join Now!" registration) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${area == 'admin' ? 'Gym System Admin' : (area == 'staff' ? 'Gym System Staff' : 'Gym System Customer')}">Gym System</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/matrix-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/matrix-login.css}"/>
+    <link rel="stylesheet" th:href="@{/font-awesome/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gym.css}"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div id="loginbox">
+
+    <!-- ===================== Login form ===================== -->
+    <form id="loginform" method="post" class="form-vertical" th:action="@{/{a}/login(a=${area})}"
+          th:style="${showRegistration} ? 'display:none'">
+        <div class="control-group normal_text">
+            <h3 th:if="${area == 'admin'}"><img th:src="@{/img/icontest3.png}" alt="Logo"/></h3>
+            <h3 th:if="${area == 'staff'}">Staff Login</h3>
+            <h3 th:if="${area == 'customer'}">Customer Login</h3>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger alert-error">
+            <span th:if="${area == 'customer'}">Invalid Username/Password or Account has been Expired!</span>
+            <span th:unless="${area == 'customer'}">Invalid Username and Password</span>
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">You have been logged out.</div>
+        <div th:if="${param.denied}" class="alert">Please log in with an account that can open this page.</div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}">Registered</div>
+
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_lg"><i class="fas fa-user-circle"></i></span><input type="text" name="username" placeholder="Username" required autofocus/>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_ly"><i class="fas fa-lock"></i></span><input type="password" name="password" placeholder="Password" required/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions center" th:unless="${area == 'customer'}">
+            <button type="submit" class="btn btn-block btn-large btn-info"
+                    th:text="${area == 'admin' ? 'Admin Login' : 'Staff Login'}">Login</button>
+        </div>
+        <div class="form-actions" th:if="${area == 'customer'}">
+            <span class="pull-left"><a href="#" class="flip-link btn btn-info" id="to-recover">Join Now!</a></span>
+            <span class="pull-right"><button type="submit" class="btn btn-success">Customer Login</button></span>
+        </div>
+
+        <th:block th:if="${area == 'admin'}">
+            <div class="pull-left"><a th:href="@{/customer/login}"><h6>Customer Login</h6></a></div>
+            <div class="pull-right"><a th:href="@{/staff/login}"><h6>Staff Login</h6></a></div>
+        </th:block>
+        <div th:unless="${area == 'admin'}" class="g">
+            <a th:href="@{/admin/login}"><h6 th:text="${area == 'staff' ? 'Admin Login' : 'Go Back'}">Go Back</h6></a>
+        </div>
+    </form>
+
+    <!-- ===================== Customer registration ("Join Now!") ===================== -->
+    <form th:if="${area == 'customer'}" id="recoverform" th:action="@{/customer/register}" method="post"
+          th:object="${registration}" class="form-vertical" th:classappend="${showRegistration} ? 'show-register'">
+        <p class="normal_text">Enter your details below and we will send your details for further activation process.</p>
+
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
+            <div th:each="err : ${#fields.errors('*')}" th:text="${err}">Error</div>
+        </div>
+
+        <div class="controls"><div class="main_input_box">
+            <span class="add-on bg_lo"><i class="fas fa-pencil-alt"></i></span><input type="text" th:field="*{fullname}" placeholder="Fullname" maxlength="20" required/>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <span class="add-on bg_lo"><i class="fas fa-at"></i></span><input type="text" th:field="*{username}" placeholder="@username" maxlength="20" required/>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <span class="add-on bg_lo"><i class="fas fa-asterisk"></i></span><input type="password" th:field="*{password}" placeholder="Password" required/>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <span class="add-on bg_lo"><i class="fas fa-phone"></i></span><input type="text" th:field="*{contact}" placeholder="7878787878" required/>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <span class="add-on bg_lo"><i class="fas fa-map-marker-alt"></i></span><input type="text" th:field="*{address}" placeholder="Address" maxlength="20" required/>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <select th:field="*{gender}" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <select th:field="*{plan}" required>
+                <option value="" disabled="disabled">Select Plans</option>
+                <option value="1">One Month</option>
+                <option value="3">Three Month</option>
+                <option value="6">Six Month</option>
+                <option value="12">One Year</option>
+            </select>
+        </div></div><br/>
+        <div class="controls"><div class="main_input_box">
+            <select th:field="*{services}" required>
+                <option value="" disabled="disabled">Select Service</option>
+                <option th:each="r : ${rates}" th:value="${r.name}" th:text="${r.name + ' - $' + r.charge + ' per month'}">Fitness</option>
+            </select>
+        </div></div>
+
+        <div class="form-actions">
+            <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Back to login</a></span>
+            <span class="pull-right"><button class="btn btn-info" type="submit">Submit Details</button></span>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    $(function () {
+        $('#to-recover').on('click', function (e) {
+            e.preventDefault();
+            $('#loginform').slideUp();
+            $('#recoverform').fadeIn();
+        });
+        $('#to-login').on('click', function (e) {
+            e.preventDefault();
+            $('#recoverform').hide().removeClass('show-register');
+            $('#loginform').fadeIn();
+        });
+    });
+</script>
+</body>
+</html>

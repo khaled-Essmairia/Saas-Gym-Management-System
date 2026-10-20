@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- customer/pages/update-todo.php -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym System')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('To-Do', 'Update To-Do Lists', 'fas fa-pencil-alt')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-edit"></i></span><h5>Update Task</h5></div>
+                    <div class="widget-content nopadding">
+                        <form th:object="${form}" method="post" th:action="@{/customer/todo/{id}/edit(id=${todoId})}" class="form-horizontal">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('taskDesc')} ? 'error'">
+                                <label class="control-label">Please Enter Your Task :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{taskDesc}" maxlength="30" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('taskDesc')}" th:errors="*{taskDesc}"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Please Select a Status:</label>
+                                <div class="controls">
+                                    <select th:field="*{taskStatus}">
+                                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}">In Progress</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <a th:href="@{/customer/todo}" class="btn">Cancel</a>
+                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>
