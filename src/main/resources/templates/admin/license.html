@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('License Management')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('License Management', 'License Management', 'fas fa-key')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-key"></i></span><h5>Current license</h5></div>
+                    <div class="widget-content">
+                        <p th:if="${license.valid}">
+                            <i class="fas fa-check-circle"></i> <strong>Active.</strong>
+                            <span th:if="${!#strings.isEmpty(license.customer)}">Licensed to <span th:text="${license.customer}">Client</span>.</span>
+                            Valid until <strong th:text="${license.expires}">2027-01-01</strong>.
+                        </p>
+                        <p th:unless="${license.valid}">
+                            <i class="fas fa-lock"></i> <strong>Not active.</strong>
+                            <span th:text="${license.message}">No license has been entered yet.</span>
+                            The menu stays hidden until a valid license is entered.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-pen"></i></span><h5>Enter a license</h5></div>
+                    <div class="widget-content">
+                        <form method="post" th:action="@{/admin/license}">
+                            <label for="key"><strong>License key</strong></label>
+                            <textarea id="key" name="key" rows="5" class="span12" required
+                                      style="font-family: monospace; word-break: break-all;"
+                                      placeholder="Paste the license key here"></textarea>
+                            <button type="submit" class="btn btn-success btn-large">Save license</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="widget-box" th:if="${!history.isEmpty()}">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-history"></i></span><h5>Previous licenses</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-striped">
+                            <thead><tr><th>Client</th><th>Valid until</th><th>Entered on</th><th></th></tr></thead>
+                            <tbody>
+                                <tr th:each="h, st : ${history}">
+                                    <td th:text="${h.customer}">Client</td>
+                                    <td th:text="${h.expiresOn}">2027-01-01</td>
+                                    <td th:text="${#temporals.format(h.activatedAt, 'yyyy-MM-dd HH:mm')}">2026-10-16 10:00</td>
+                                    <td><span th:if="${st.first}" class="label label-info">Latest</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

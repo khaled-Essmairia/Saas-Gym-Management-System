@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('License')}"></head>
+<body>
+<div style="max-width: 640px; margin: 48px auto; padding: 0 16px;">
+    <div class="widget-box">
+        <div class="widget-title bg_lg"><span class="icon"><i class="fas fa-key"></i></span><h5>Software license</h5></div>
+        <div class="widget-content">
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}">Activated</div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}">Error</div>
+
+            <p th:if="${status.valid}">
+                <i class="fas fa-check-circle"></i>
+                <strong>Active.</strong>
+                <span th:if="${!#strings.isEmpty(status.customer)}">Licensed to <span th:text="${status.customer}">Client</span>. </span>
+                Valid until <strong th:text="${status.expires}">2027-01-01</strong>.
+            </p>
+            <p th:unless="${status.valid}">
+                <i class="fas fa-lock"></i>
+                <strong>Not active.</strong> <span th:text="${status.message}">No license has been entered yet.</span>
+                The menu stays hidden until a valid license is entered.
+            </p>
+
+            <form th:action="@{/license}" method="post">
+                <label for="key"><strong>License key</strong></label>
+                <textarea id="key" name="key" rows="5" required style="width: 95%; font-family: monospace; word-break: break-all;"
+                          placeholder="Paste the license key here"></textarea>
+                <div class="form-actions" style="margin-top: 12px;">
+                    <button type="submit" class="btn btn-success">Activate license</button>
+                    <a th:href="@{/admin/login}" class="btn">Back to login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
