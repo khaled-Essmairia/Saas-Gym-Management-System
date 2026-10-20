@@ -35,7 +35,23 @@
 
                 <div class="widget-box" th:unless="${searching and #lists.isEmpty(members)}">
                     <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Member table</h5></div>
-                    <div class="widget-content nopadding">
+                    <div class="widget-content nopadding" data-pager>
+
+                        <!-- Toolbar: page size + search -->
+                        <div class="table-toolbar">
+                            <label>Show
+                                <select data-role="size">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select> entries
+                            </label>
+                            <label>Filter:
+                                <input type="text" data-role="search" placeholder="Name, service, plan..."/>
+                            </label>
+                        </div>
+
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr><th>#</th><th>Fullname</th><th>Choosen Service</th><th>Plan</th><th>Action</th></tr>
@@ -46,12 +62,21 @@
                                 <td><div class="text-center" th:text="${m.fullname}">Name</div></td>
                                 <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
                                 <td><div class="text-center" th:text="${m.plan} + ' Month/s'">1 Month/s</div></td>
-                                <td><div class="text-center">
+                                <td data-nosearch><div class="text-center">
                                     <a th:href="@{/admin/progress/{id}(id=${m.userId})}" class="btn btn-warning">Update Progress</a>
                                 </div></td>
                             </tr>
+                            <tr th:if="${#lists.isEmpty(members)}" data-pager-ignore>
+                                <td colspan="5" class="empty-state">No members yet.</td>
+                            </tr>
                             </tbody>
                         </table>
+
+                        <!-- Footer: info + page buttons -->
+                        <div class="table-footer">
+                            <div data-role="info"></div>
+                            <div data-role="nav"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,5 +85,6 @@
 </div>
 
 <th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script th:src="@{/js/table-pager.js}"></script>
 </body>
 </html>
