@@ -1,0 +1,24 @@
+/* Small additions to the original Matrix admin theme */
+#footer { color: white; }
+.field-error { color: #b94a48; display: block; margin-top: 4px; font-size: 12px; }
+.control-group.error input, .control-group.error select, .control-group.error textarea { border-color: #b94a48; }
+.inline-form { display: inline; margin: 0; }
+.btn-link-danger { background: none; border: 0; padding: 0; color: #F66; cursor: pointer; }
+.btn-link-danger:hover { text-decoration: underline; }
+.btn-link-plain { background: none; border: 0; padding: 0; color: #28b779; cursor: pointer; }
+.table td .text-center { text-align: center; }
+.chart-box { width: 100%; height: 300px; }
+.empty-state { padding: 30px; text-align: center; color: #777; }
+.status-dot { font-size: 10px; margin-right: 4px; }
+#custom-search-form { margin: 0 0 10px 0; }
+#custom-search-form .search-query { margin-bottom: 0; }
+.report-head td { padding: 2px 0; }
+.invoice-top { overflow: hidden; }
+
+/* Login page: show the registration form when it has errors */
+#loginbox form#recoverform.show-register { display: block; }
+
+@media print {
+    #header, #user-nav, #sidebar, #footer, #breadcrumb, .no-print, .alert { display: none !important; }
+    #content { margin: 0 !important; }
+}
