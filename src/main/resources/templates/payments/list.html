@@ -13,14 +13,7 @@
         <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
         <div class="row-fluid">
             <div class="span12">
-                <form id="custom-search-form" method="get" th:action="@{/{a}/payments(a=${area})}"
-                      class="form-search form-horizontal pull-right">
-                    <div class="input-append">
-                        <input type="text" class="search-query" placeholder="Search" name="search" th:value="${search}" required/>
-                        <button type="submit" class="btn"><i class="fas fa-search"></i></button>
-                    </div>
-                    <a th:if="${searching}" th:href="@{/{a}/payments(a=${area})}" class="btn btn-mini">Show all</a>
-                </form>
+
 
                 <div class="widget-box" th:if="${searching and #lists.isEmpty(members)}">
                     <div class="widget-title"><span class="icon"><i class="fas fa-info"></i></span><h5>Error Message</h5></div>
@@ -36,7 +29,23 @@
 
                 <div class="widget-box" th:unless="${searching and #lists.isEmpty(members)}">
                     <div class="widget-title"><span class="icon"><i class="fas fa-th"></i></span><h5>Member's Payment table</h5></div>
-                    <div class="widget-content nopadding">
+                    <div class="widget-content nopadding" data-pager>
+
+                        <!-- Toolbar: page size + filter -->
+                        <div class="table-toolbar">
+                            <label>Show
+                                <select data-role="size">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select> entries
+                            </label>
+                            <label>Filter:
+                                <input type="text" data-role="search" placeholder="Name, date, service, plan..."/>
+                            </label>
+                        </div>
+
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
@@ -58,13 +67,13 @@
                                 <td><div class="text-center" th:text="'$' + ${m.amount}">$0</div></td>
                                 <td><div class="text-center" th:text="${m.services}">Fitness</div></td>
                                 <td><div class="text-center" th:text="${m.plan} + ' Month/s'">1 Month/s</div></td>
-                                <td>
+                                <td data-nosearch>
                                     <div class="text-center">
                                         <a th:href="@{/{a}/payments/{id}(a=${area},id=${m.userId})}" class="btn btn-success">
                                             <i class="fas fa-dollar-sign"></i> Make Payment</a>
                                     </div>
                                 </td>
-                                <td>
+                                <td data-nosearch>
                                     <div class="text-center">
                                         <form class="inline-form" method="post"
                                               th:action="@{/{a}/payments/{id}/remind(a=${area},id=${m.userId})}">
@@ -74,8 +83,17 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr th:if="${#lists.isEmpty(members)}" data-pager-ignore>
+                                <td colspan="8" class="empty-state">No members yet.</td>
+                            </tr>
                             </tbody>
                         </table>
+
+                        <!-- Footer: info + page buttons -->
+                        <div class="table-footer">
+                            <div data-role="info"></div>
+                            <div data-role="nav"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,5 +102,6 @@
 </div>
 
 <th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script th:src="@{/js/table-pager.js}"></script>
 </body>
 </html>
