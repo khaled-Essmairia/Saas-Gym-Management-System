@@ -22,3 +22,21 @@
     #header, #user-nav, #sidebar, #footer, #breadcrumb, .no-print, .alert { display: none !important; }
     #content { margin: 0 !important; }
 }
+
+
+
+
+
+.table-toolbar,
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 12px;
+}
+.table-toolbar select { width: auto; margin: 0 6px; }
+.table-toolbar input[type="text"] { margin: 0; }
+.table-toolbar label { margin: 0; }
+.table-footer .pagination { margin: 0; }
