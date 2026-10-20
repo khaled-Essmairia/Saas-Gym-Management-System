@@ -1,0 +1,31 @@
+target/
+*.iml
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+*.log
+
+# Build
+target/
+
+# Eclipse / IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Licensing (never publish)
+license.key
+license-generator.html
+
+# Local config / secrets
+application-local.properties
+*.log
