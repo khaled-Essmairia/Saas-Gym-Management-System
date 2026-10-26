@@ -14,6 +14,11 @@ A full-stack gym management web application built with **Spring Boot**, **Spring
 - **Customer tools** – to-do list, reminders and personal reports
 - **Reports and charts** – member and progress reports with visual statistics
 - **License activation** – built-in license validation system
+- **License tied to a computer** – a key made with the generator's *Computer ID* field only works on the computer that shows that Machine ID (License Management page); set `gym.license.require-machine-id=true` to refuse keys without one
+- **CSV import** – *Import Members (CSV)* and *Import Equipment (CSV)* in the admin sidebar, each with a template download; the whole file is checked first and nothing is saved if a line has a problem
+- **Reporting** – export the members / staff / attendance data and every database table (one CSV, or all tables in one ZIP); password columns are never exported
+- **System Administration > Admin Profile** – the logged-in admin changes his password (old password, new password, confirmation); old MD5 passwords are accepted as the old password and replaced by a BCrypt hash
+- **Manage Services** – add, update and remove the services (Fitness, Sauna ...) and their monthly price; renaming a service renames it for its members, and a service that still has members cannot be removed
 - **Legacy-compatible authentication** – password encoder that supports migrating older hashes
 
 ## 🛠️ Tech Stack

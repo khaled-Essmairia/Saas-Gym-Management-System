@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- Reporting: CSV exports of the members / staff data and of every table, see ReportingController -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reporting')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Reporting', 'Reporting', 'fas fa-file-export')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-users"></i></span><h5>Users and their data</h5></div>
+                    <div class="widget-content">
+                        <p>Every column of the table is exported (registration, plan, payments, progress, attendance count ...).</p>
+                        <a class="btn btn-success" th:href="@{/admin/reporting/table/members}"><i class="fas fa-file-alt"></i> Export members</a>
+                        <a class="btn btn-success" th:href="@{/admin/reporting/table/staffs}"><i class="fas fa-file-alt"></i> Export staff</a>
+                        <a class="btn btn-success" th:href="@{/admin/reporting/table/attendance}"><i class="fas fa-file-alt"></i> Export attendance history</a>
+                    </div>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-database"></i></span><h5>Database</h5></div>
+                    <div class="widget-content">
+                        <p>
+                            <a class="btn btn-primary" th:href="@{/admin/reporting/all}"><i class="fas fa-file-archive"></i> Export all tables (ZIP)</a>
+                            <span class="muted" style="margin-left: 8px;">One CSV file per table.</span>
+                        </p>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-striped">
+                            <thead><tr><th>Table</th><th>Rows</th><th></th></tr></thead>
+                            <tbody>
+                            <tr th:each="t : ${tables}">
+                                <td><code th:text="${t.name}">members</code></td>
+                                <td th:text="${t.rows}">0</td>
+                                <td class="text-center">
+                                    <a class="btn btn-small btn-info" th:href="@{/admin/reporting/table/{n}(n=${t.name})}">
+                                        <i class="fas fa-download"></i> Export
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-content muted">
+                        Files are UTF-8 CSV and open directly in Excel. Password columns are never exported.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

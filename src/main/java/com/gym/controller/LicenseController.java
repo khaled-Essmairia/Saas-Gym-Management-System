@@ -29,6 +29,7 @@ public class LicenseController {
     @GetMapping
     public String page(Model model) {
         model.addAttribute("history", licenses.history());
+        model.addAttribute("machineId", licenses.machineId());
         model.addAttribute("page", "license");
         return "admin/license";
     }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- Manage Services: list with add / edit / remove (see ServiceController) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manage Services')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Manage Services', 'Services and monthly prices', 'fas fa-concierge-bell')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="fas fa-th"></i></span><h5>Services</h5>
+                    </div>
+                    <div class="widget-content">
+                        <a class="btn btn-success" th:href="@{/admin/services/new}"><i class="fas fa-plus"></i> Add service</a>
+                        <span class="muted" style="margin-left: 8px;">
+                            A new price applies to members registered afterwards; amounts already paid do not change.
+                        </span>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr><th>#</th><th>Service</th><th>Monthly price</th><th>Members</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="s, it : ${services}">
+                                <td><div class="text-center" th:text="${it.count}">1</div></td>
+                                <td><div class="text-center" th:text="${s.name}">Fitness</div></td>
+                                <td><div class="text-center" th:text="'$' + ${s.charge}">$55</div></td>
+                                <td><div class="text-center" th:text="${s.members}">0</div></td>
+                                <td>
+                                    <div class="text-center">
+                                        <a th:href="@{/admin/services/{id}/edit(id=${s.id})}"><i class="fas fa-edit"></i> Edit</a>
+                                        &nbsp;
+                                        <form class="inline-form confirm-delete" method="post"
+                                              th:action="@{/admin/services/{id}/delete(id=${s.id})}"
+                                              th:attr="data-confirm='Remove ' + ${s.name} + '?'">
+                                            <button type="submit" class="btn-link-danger"><i class="fas fa-trash"></i> Remove</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(services)}">
+                                <td colspan="5" class="empty-state">No service yet. Members cannot be added until there is at least one.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

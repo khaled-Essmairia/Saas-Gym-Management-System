@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- System Administration > Admin Profile (see AdminProfileController) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Profile')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader('Admin Profile', 'Admin Profile', 'fas fa-user-shield')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-lock"></i></span><h5>Change password</h5></div>
+                    <div class="widget-content nopadding">
+                        <form id="password-form" class="form-horizontal" method="post" th:action="@{/admin/profile}" autocomplete="off">
+                            <div class="control-group">
+                                <label class="control-label">Account :</label>
+                                <div class="controls">
+                                    <span class="help-inline" style="padding-top: 5px;">
+                                        <strong th:text="${adminUsername}">admin</strong>
+                                        <span th:if="${adminName != null and adminName != adminUsername}" th:text="'(' + ${adminName} + ')'"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="oldPassword">Old password :</label>
+                                <div class="controls">
+                                    <input type="password" id="oldPassword" name="oldPassword" required="required" autocomplete="current-password"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="newPassword">New password :</label>
+                                <div class="controls">
+                                    <input type="password" id="newPassword" name="newPassword" required="required"
+                                           th:attr="minlength=${minLength},maxlength=${maxLength}" autocomplete="new-password"/>
+                                    <span class="help-inline" th:text="'At least ' + ${minLength} + ' characters.'">At least 6 characters.</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="confirmPassword">Confirm new password :</label>
+                                <div class="controls">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required="required"
+                                           th:attr="maxlength=${maxLength}" autocomplete="new-password"/>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Change password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    // Same check as the server, only to tell the admin before the form is sent
+    $('#password-form').on('submit', function () {
+        if ($('#newPassword').val() !== $('#confirmPassword').val()) {
+            alert('The new password and its confirmation are not the same.');
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

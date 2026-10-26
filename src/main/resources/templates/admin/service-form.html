@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- Add / update a service (see ServiceController) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manage Services')}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${serviceId == null ? 'Add Service' : 'Update Service'}, ${serviceId == null ? 'New service' : 'Update service'}, 'fas fa-concierge-bell')}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+        <form th:object="${form}" method="post" class="form-horizontal"
+              th:action="${serviceId == null} ? @{/admin/services/new} : @{/admin/services/{id}/edit(id=${serviceId})}">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title"><span class="icon"><i class="fas fa-align-justify"></i></span><h5>Service</h5></div>
+                        <div class="widget-content nopadding">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('name')} ? 'error'">
+                                <label class="control-label">Service :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" th:field="*{name}" placeholder="Fitness, Sauna ..." maxlength="50" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                                    <span class="help-block" th:if="${serviceId != null}">Renaming also renames it for the members who use it.</span>
+                                </div>
+                            </div>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('charge')} ? 'error'">
+                                <label class="control-label">Monthly price ($) :</label>
+                                <div class="controls">
+                                    <input type="number" min="1" max="100000" class="span5" th:field="*{charge}" placeholder="Price per month" required/>
+                                    <span class="field-error" th:if="${#fields.hasErrors('charge')}" th:errors="*{charge}"></span>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                                <a class="btn" th:href="@{/admin/services}">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

@@ -73,6 +73,7 @@
                 <li th:classappend="${page == 'members-update'} ? 'active'"><a th:href="@{/admin/members/edit}"><i class="fas fa-arrow-right"></i> Update Member Details</a></li>
             </ul>
         </li>
+        <li th:classappend="${page == 'import-members'} ? 'active'"><a th:href="@{/admin/members/import}"><i class="fas fa-file-upload"></i> <span>Import Members (CSV)</span></a></li>
         <li class="submenu" th:classappend="${page != null and page.endsWith('-equip')} ? 'active open'">
             <a href="#"><i class="fas fa-dumbbell"></i> <span>Gym Equipment</span> <span class="label label-important" th:text="${@statsService.equipmentCount()}">0</span></a>
             <ul>
@@ -82,6 +83,8 @@
                 <li th:classappend="${page == 'update-equip'} ? 'active'"><a th:href="@{/admin/equipment/edit}"><i class="fas fa-arrow-right"></i> Update Equipment Details</a></li>
             </ul>
         </li>
+        <li th:classappend="${page == 'import-equipment'} ? 'active'"><a th:href="@{/admin/equipment/import}"><i class="fas fa-file-upload"></i> <span>Import Equipment (CSV)</span></a></li>
+        <li th:classappend="${page == 'services'} ? 'active'"><a th:href="@{/admin/services}"><i class="fas fa-concierge-bell"></i> <span>Manage Services</span></a></li>
         <li class="submenu" th:classappend="${page == 'attendance' or page == 'view-attendance'} ? 'active open'">
             <a href="#"><i class="fas fa-calendar-alt"></i> <span>Attendance</span></a>
             <ul>
@@ -100,6 +103,13 @@
                 <li th:classappend="${page == 'chart'} ? 'active'"><a th:href="@{/admin/reports/charts}"><i class="fas fa-arrow-right"></i> Chart Representation</a></li>
                 <li th:classappend="${page == 'member-repo'} ? 'active'"><a th:href="@{/admin/reports/members}"><i class="fas fa-arrow-right"></i> Members Report</a></li>
                 <li th:classappend="${page == 'c-p-r'} ? 'active'"><a th:href="@{/admin/reports/progress}"><i class="fas fa-arrow-right"></i> Customer Progress Report</a></li>
+            </ul>
+        </li>
+        <li th:classappend="${page == 'reporting'} ? 'active'"><a th:href="@{/admin/reporting}"><i class="fas fa-file-export"></i> <span>Reporting</span></a></li>
+        <li class="submenu" th:classappend="${page == 'admin-profile'} ? 'active open'">
+            <a href="#"><i class="fas fa-user-cog"></i> <span>System Administration</span></a>
+            <ul>
+                <li th:classappend="${page == 'admin-profile'} ? 'active'"><a th:href="@{/admin/profile}"><i class="fas fa-arrow-right"></i> Admin Profile</a></li>
             </ul>
         </li>
         </th:block>

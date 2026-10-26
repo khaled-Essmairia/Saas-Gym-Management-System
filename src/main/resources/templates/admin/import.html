@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- Import Members (CSV) / Import Equipment (CSV): one page for both, see ImportController -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<th:block th:replace="~{fragments/layout :: header}"></th:block>
+<div th:replace="~{fragments/layout :: sidebar}"></div>
+
+<div id="content">
+    <div th:replace="~{fragments/layout :: contentHeader(${title}, ${title}, ${icon})}"></div>
+    <div class="container-fluid">
+        <hr/>
+        <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+        <div class="row-fluid">
+            <div class="span12">
+
+                <!-- Problems found in the uploaded file: nothing was saved -->
+                <div class="alert alert-error" th:if="${result != null and !result.errors.isEmpty()}">
+                    <strong>Nothing was imported.</strong>
+                    Please fix the following and upload the file again:
+                    <ul style="margin-top: 8px;">
+                        <li th:each="e : ${result.errors}" th:text="${e}">Line 2: Username is required</li>
+                    </ul>
+                    <p th:if="${result.hiddenErrors > 0}" th:text="'... and ' + ${result.hiddenErrors} + ' more line(s) with problems.'"></p>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-file-alt"></i></span><h5>1. Get the template</h5></div>
+                    <div class="widget-content">
+                        <p>
+                            Download the template, fill in one line per <span th:text="${what == 'members' ? 'member' : 'equipment item'}">member</span>
+                            (replace the two example lines), and save it as CSV.
+                        </p>
+                        <a class="btn btn-small btn-info" th:href="@{${templateUrl}}">
+                            <i class="fas fa-download"></i> Download template
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-upload"></i></span><h5>2. Upload the filled file</h5></div>
+                    <div class="widget-content">
+                        <form method="post" enctype="multipart/form-data" th:action="@{${actionUrl}}">
+                            <input type="file" name="file" accept=".csv,text/csv" required="required"/>
+                            <br/>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-file-import"></i> Import
+                            </button>
+                        </form>
+                        <p class="muted" style="margin-top: 10px;">
+                            Up to <span th:text="${maxRows}">1000</span> lines per file.
+                            Every line is checked first: if one line has a problem, nothing is imported and the problems are listed above.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-columns"></i></span><h5>Columns of the file</h5></div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered table-striped">
+                            <thead><tr><th>Column</th><th>Required</th><th>What to write</th></tr></thead>
+                            <tbody>
+                            <tr th:each="c : ${columns}">
+                                <td><code th:text="${c.name}">fullname</code></td>
+                                <td th:text="${c.required ? 'Yes' : 'No'}">Yes</td>
+                                <td th:text="${c.help}">Help</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-content" th:if="${services != null}">
+                        <strong>Services:</strong>
+                        <span th:each="s, it : ${services}"><code th:text="${s}">Fitness</code><span th:unless="${it.last}">, </span></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

@@ -20,12 +20,26 @@
                             <i class="fas fa-check-circle"></i> <strong>Active.</strong>
                             <span th:if="${!#strings.isEmpty(license.customer)}">Licensed to <span th:text="${license.customer}">Client</span>.</span>
                             Valid until <strong th:text="${license.expires}">2027-01-01</strong>.
+                            <span th:if="${license.bound}"><i class="fas fa-laptop"></i> Tied to this computer.</span>
                         </p>
                         <p th:unless="${license.valid}">
                             <i class="fas fa-lock"></i> <strong>Not active.</strong>
                             <span th:text="${license.message}">No license has been entered yet.</span>
                             The menu stays hidden until a valid license is entered.
                         </p>
+                    </div>
+                </div>
+
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="fas fa-laptop"></i></span><h5>This computer</h5></div>
+                    <div class="widget-content">
+                        <p>Machine ID of this computer. Send it to your provider to get a license that works only on this computer.</p>
+                        <input type="text" id="machine-id" class="span4" readonly th:value="${machineId}"
+                               style="font-family: monospace; font-size: 16px; letter-spacing: 1px;"/>
+                        <button type="button" class="btn btn-info" id="copy-machine-id" style="margin-bottom: 9px;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <span id="machine-id-copied" style="margin-left: 8px;"></span>
                     </div>
                 </div>
 
@@ -64,5 +78,14 @@
 </div>
 
 <th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    $('#copy-machine-id').on('click', function () {
+        var field = document.getElementById('machine-id');
+        field.select();
+        var done = function () { $('#machine-id-copied').text('Copied'); setTimeout(function () { $('#machine-id-copied').text(''); }, 2500); };
+        if (navigator.clipboard) { navigator.clipboard.writeText(field.value).then(done, function () { document.execCommand('copy'); done(); }); }
+        else { document.execCommand('copy'); done(); }
+    });
+</script>
 </body>
 </html>
